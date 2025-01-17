@@ -1,0 +1,13 @@
+venv
+.idea
+.DS_Store
+.pytest_cache
+__pycache__
+.env
+allure-results
+allure-report
+auth.txt
+mri_data.zip
+mri_data/
+token.txt
+auth.txt

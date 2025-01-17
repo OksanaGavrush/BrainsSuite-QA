@@ -1,8 +1,6 @@
 import os
-
 import hashlib
 import gzip
-
 import requests
 
 
