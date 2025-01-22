@@ -1,4 +1,4 @@
-name: Python application test
+name: BrainSuite tests
 
 on:
   workflow_dispatch:

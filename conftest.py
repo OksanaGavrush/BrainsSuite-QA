@@ -9,7 +9,7 @@ from endpoints.get_patient_info import GetPatientInfo
 from endpoints.get_patient_visits import GetPatientVisits
 from endpoints.post_patient_visits import PostPatientVisits
 from endpoints.patient_visits_questionnaire_check_link import PatientVisitsQuestionnaire
-# from endpoints.patient_mri_upload import PatientUpload
+from endpoints.patient_mri_upload import PatientUpload
 from selenium.webdriver.chrome.options import Options
 
 
@@ -119,8 +119,8 @@ def post_patient_visits():
 @pytest.fixture
 def patient_questionnaire():
     return PatientVisitsQuestionnaire()
-#
-#
-# @pytest.fixture
-# def patient_mri_upload():
-#     return PatientUpload()
+
+
+@pytest.fixture
+def patient_mri_upload():
+    return PatientUpload()
