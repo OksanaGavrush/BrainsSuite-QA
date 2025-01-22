@@ -6,7 +6,6 @@ __pycache__
 .env
 allure-results
 allure-report
-auth.txt
 mri_data.zip
 mri_data/
 mri_upload_utils.py
