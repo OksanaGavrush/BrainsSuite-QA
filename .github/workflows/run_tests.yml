@@ -41,3 +41,22 @@ jobs:
         if: "github.event.inputs.deployment_target == 'smoke'"
       - name: Run regression tests
         run: pytest -m regression --alluredir=allure-results
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'microsoft'
+          java-version: '17'
+      - name: Install Allure
+        run: |
+          sudo wget https://github.com/allure-framework/allure2/releases/download/2.32.0/allure-2.32.0.tgz && 
+          sudo tar -zxvf allure-2.32.0.tgz -C /opt/ &&
+          sudo ln -s /opt/allure-2.32.0/bin/allure /usr/bin/allure
+      - name: Generate report
+        run: allure generate -c allure-results -o allure-reporte
+      - name: Save report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-reporte
+          path: allure-reporte
+          retention-days: 5
+      
