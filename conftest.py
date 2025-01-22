@@ -2,8 +2,7 @@ import os
 import pytest
 import requests
 from selenium import webdriver
-from endpoints.create_sync_user_endp import CreateSyncUser
-from endpoints.manager_syns_user_endp import ManagerSynsUser
+from endpoints.post_nextlogic_sync_endpoint import PostSyncUser
 from endpoints.put_patient_info import PutPatientInfo
 from endpoints.get_patient_info import GetPatientInfo
 from endpoints.get_patient_visits import GetPatientVisits
@@ -89,13 +88,8 @@ def driver():
 
 
 @pytest.fixture
-def create_syns_user():
-    return CreateSyncUser()
-
-
-@pytest.fixture
-def manager_syns_user():
-    return ManagerSynsUser()
+def post_syns_user():
+    return PostSyncUser()
 
 
 @pytest.fixture
@@ -126,7 +120,3 @@ def patient_questionnaire():
 @pytest.fixture
 def patient_mri_upload():
     return PatientUpload()
-
-
-
-# export PYTHONPATH="${PYTHONPATH}:/Users/oksana/qa/Brainsuite_api_testing"

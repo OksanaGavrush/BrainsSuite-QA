@@ -14,18 +14,15 @@ from endpoints.base_endpoint import BaseEndpoint
 
 class PatientVisitsQuestionnaire(BaseEndpoint):
     questionnaire_url = None
-    get_url_b = None
-    pdf_response = None
     driver = None
 
     @allure.step("Get questionnaire URL and visit ID")
-    def get_questionnaire_url(self, token, app_key):
+    def get_questionnaire_url_and_visits_id(self, token, app_key):
         headers = {
             "Authorization": f"Bearer {token}",
             "Authorization-App": f"{app_key}",
         }
-        with allure.step(f"Sending POST request to retrieve questionnaire URL with headers: {headers}"):
-            self.response = requests.post('https://api.brainsuite.co.jp/patient/visits', headers=headers)
+        self.response = requests.post('https://api.brainsuite.co.jp/patient/visits', headers=headers)
         self.questionnaire_url = self.response.json()["data"].get('questionnaire')[0].get('url')
         self.visit_id = self.response.json()["data"]['visitId']
 
@@ -35,9 +32,9 @@ class PatientVisitsQuestionnaire(BaseEndpoint):
             "Authorization": f"Bearer {token}",
             "Authorization-App": f"{app_key}",
         }
-        with allure.step("Sending GET request to retrieve questionnaire data"):
-            self.response = requests.get(f'https://api.brainsuite.co.jp/patient/visits/{self.visit_id}', headers=headers)
-            response_json = self.response.json()
+
+        self.response = requests.get(f'https://api.brainsuite.co.jp/patient/visits/{self.visit_id}', headers=headers)
+        response_json = self.response.json()
 
         score_keys = [
             'BMIScore', 'exerciseScore', 'dietScore',
@@ -108,26 +105,15 @@ class PatientVisitsQuestionnaire(BaseEndpoint):
         self.driver.find_element(By.XPATH, '//button[text()="進む ▶︎"]').click()
         sleep(1)
 
-    @allure.step("Get patient visit with ID")
-    def get_patient_visits_with_id(self, token, app_key):
+    @allure.step("Update patient info and check completed questionnaire")
+    def update_patient_info_and_check_completed_questionnaire(self, token, app_key):
         headers = {
             "Authorization": f"Bearer {token}",
             "Authorization-App": f"{app_key}",
         }
-        with allure.step(f"Sending GET request to retrieve report URL for visit ID: {self.visit_id}"):
+        with allure.step(f"Sending GET request to retrieve report URL"):
             self.response = requests.get(f'https://api.brainsuite.co.jp/patient/visits/'
                                          f'{self.visit_id}', headers=headers)
-
-    @allure.step("Get URL with patient visit ID")
-    def get_url_with_patient_visits_id(self, token, app_key):
-        headers = {
-            "Authorization": f"Bearer {token}",
-            "Authorization-App": f"{app_key}",
-        }
-        with allure.step(f"Sending GET request to retrieve report URL for visit ID: {self.visit_id}"):
-            self.response = requests.get(f'https://api.brainsuite.co.jp/patient/visits/'
-                                         f'{self.visit_id}', headers=headers)
-        response_json = self.response.json()
 
         score_keys = [
             'BMIScore', 'exerciseScore', 'dietScore',
@@ -136,15 +122,17 @@ class PatientVisitsQuestionnaire(BaseEndpoint):
         ]
 
         for key in score_keys:
-            value = response_json['data']['questionnaire'][0].get(key, {}).get('score')
+            value = self.response.json()['data']['questionnaire'][0].get(key, {}).get('score')
             assert isinstance(value, str), f"{key} score is not a string. Got: {type(value)}"
 
     @allure.step("Verify that the report is a valid PDF")
-    def verify_pdf_response(self, token, app_key):
+    def get_url_b_and_verify_pdf_response(self, token, app_key):
         headers = {
             "Authorization": f"Bearer {token}",
             "Authorization-App": f"{app_key}",
         }
-        with allure.step(f"Sending GET request to validate PDF at: {self.get_url_b}"):
-            pdf_response = requests.get(f'{self.get_url_b}', headers=headers)
+        self.response = requests.get(f'https://api.brainsuite.co.jp/patient/visits/'
+                                     f'{self.visit_id}', headers=headers)
+        get_report_url_b = self.response.json()['data']['report']['B'].get('url')
+        pdf_response = requests.get(get_report_url_b, headers=headers)
         assert pdf_response.headers['Content-Type'] == 'application/pdf'

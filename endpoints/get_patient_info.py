@@ -12,8 +12,7 @@ class GetPatientInfo(BaseEndpoint):
             "Authorization": f"Bearer {token} + q",
             "Authorization-App": f"{app_key}",
         }
-        with allure.step(f"Sending GET request with headers: {headers}"):
-            self.response = requests.get('https://api.brainsuite.co.jp/patient/info', headers=headers)
+        self.response = requests.get('https://api.brainsuite.co.jp/patient/info', headers=headers)
 
     @allure.step("Get patient info without providing token")
     def get_patient_info_with_not_provided_token(self, app_key):
@@ -21,8 +20,7 @@ class GetPatientInfo(BaseEndpoint):
             "Authorization": '',
             "Authorization-App": f"{app_key}",
         }
-        with allure.step(f"Sending GET request with headers: {headers}"):
-            self.response = requests.get('https://api.brainsuite.co.jp/patient/info', headers=headers)
+        self.response = requests.get('https://api.brainsuite.co.jp/patient/info', headers=headers)
 
     @allure.step("Validate JSON schema of patient info response")
     def validate_json_schema(self, token, app_key):
@@ -30,7 +28,16 @@ class GetPatientInfo(BaseEndpoint):
             "Authorization": f"Bearer {token}",
             "Authorization-App": f"{app_key}",
         }
-        with allure.step(f"Sending GET request with headers: {headers}"):
-            self.response = requests.get('https://api.brainsuite.co.jp/patient/info', headers=headers)
-        with allure.step("Parsing response JSON into schema object"):
-            self.response_data = GetApiResponse(**self.response.json())
+        self.response = requests.get('https://api.brainsuite.co.jp/patient/info', headers=headers)
+        self.response_data = GetApiResponse(**self.response.json())
+
+    @allure.step("Update user information")
+    def get_send_user_info_update(self, token, app_key, name, birthdate, gender):
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Authorization-App": f"{app_key}",
+        }
+        self.response = requests.get('https://api.brainsuite.co.jp/patient/info', headers=headers)
+        assert self.response.json()['data'].get('name') == name
+        assert self.response.json()['data'].get('birthdate') == birthdate
+        assert self.response.json()['data'].get('gender') == gender
