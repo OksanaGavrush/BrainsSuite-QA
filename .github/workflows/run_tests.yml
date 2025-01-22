@@ -41,4 +41,3 @@ jobs:
         if: "github.event.inputs.deployment_target == 'smoke'"
       - name: Run regression tests
         run: pytest -m regression
-        if: "github.event.inputs.deployment_target == 'regression'"

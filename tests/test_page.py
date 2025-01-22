@@ -44,7 +44,6 @@ def test_invalid_gender(post_syns_user, app_key, gender):
 
 
 @pytest.mark.smoke
-@pytest.mark.user_validation_tests
 def test_validate_birth_year_in_future(post_syns_user, app_key):
     post_syns_user.validate_birth_year(app_key, 1899)
     post_syns_user.check_status_code_is_400()
