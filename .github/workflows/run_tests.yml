@@ -10,7 +10,7 @@ on:
         default: smoke
         options:
           - smoke
-          # - regression
+          - regression
           - all
 
 permissions:
