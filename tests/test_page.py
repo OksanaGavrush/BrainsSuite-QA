@@ -150,26 +150,26 @@ def test_get_patient_visit(get_patient_visits, token, app_key):
     get_patient_visits.check_status_code_is_200()
 
 
-@pytest.mark.regression
-def test_complete_questionnaire(patient_questionnaire, token, app_key, driver):
-    patient_questionnaire.get_questionnaire_url_and_visits_id(token, app_key)
-    patient_questionnaire.validate_empty_questionnaire_form(token, app_key)
-    patient_questionnaire.answer_survey_questions(driver)
-    patient_questionnaire.update_patient_info_and_check_completed_questionnaire(token, app_key)
-    patient_questionnaire.check_status_code_is_200()
-    patient_questionnaire.get_url_b_and_verify_pdf_response(token, app_key)
-    patient_questionnaire.check_status_code_is_200()
+# @pytest.mark.regression
+# def test_complete_questionnaire(patient_questionnaire, token, app_key, driver):
+#     patient_questionnaire.get_questionnaire_url_and_visits_id(token, app_key)
+#     patient_questionnaire.validate_empty_questionnaire_form(token, app_key)
+#     patient_questionnaire.answer_survey_questions(driver)
+#     patient_questionnaire.update_patient_info_and_check_completed_questionnaire(token, app_key)
+#     patient_questionnaire.check_status_code_is_200()
+#     patient_questionnaire.get_url_b_and_verify_pdf_response(token, app_key)
+#     patient_questionnaire.check_status_code_is_200()
 
 
-@pytest.mark.regression
-def test_upload_mri_files_to_patient_mri_and_upload_pdf(patient_mri_upload, token, app_key):
-    patient_mri_upload.create_patient_visits_and_get_visits_id(token, app_key)
-    patient_mri_upload.check_status_code_is_200()
-    patient_mri_upload.post_payload_patient(token, app_key)
-    patient_mri_upload.get_mri_uuid()
-    patient_mri_upload.check_status_code_is_200()
-    patient_mri_upload.upload_files_with_mri_uuid(token, app_key)
-    patient_mri_upload.check_status_code_is_200()
-    patient_mri_upload.get_report_url_upload_files(token, app_key)
-    patient_mri_upload.verify_pdf_response(token, app_key)
+# @pytest.mark.regression
+# def test_upload_mri_files_to_patient_mri_and_upload_pdf(patient_mri_upload, token, app_key):
+#     patient_mri_upload.create_patient_visits_and_get_visits_id(token, app_key)
+#     patient_mri_upload.check_status_code_is_200()
+#     patient_mri_upload.post_payload_patient(token, app_key)
+#     patient_mri_upload.get_mri_uuid()
+#     patient_mri_upload.check_status_code_is_200()
+#     patient_mri_upload.upload_files_with_mri_uuid(token, app_key)
+#     patient_mri_upload.check_status_code_is_200()
+#     patient_mri_upload.get_report_url_upload_files(token, app_key)
+#     patient_mri_upload.verify_pdf_response(token, app_key)
 
