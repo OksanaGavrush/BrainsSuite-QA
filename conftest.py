@@ -112,11 +112,11 @@ def post_patient_visits():
     return PostPatientVisits()
 
 
-@pytest.fixture
-def patient_questionnaire():
-    return PatientVisitsQuestionnaire()
-
-
-@pytest.fixture
-def patient_mri_upload():
-    return PatientUpload()
+# @pytest.fixture
+# def patient_questionnaire():
+#     return PatientVisitsQuestionnaire()
+#
+#
+# @pytest.fixture
+# def patient_mri_upload():
+#     return PatientUpload()
