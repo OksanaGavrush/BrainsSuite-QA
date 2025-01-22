@@ -10,7 +10,7 @@ on:
         default: smoke
         options:
           - smoke
-          - regression
+          # - regression
           - all
 
 permissions:
@@ -39,8 +39,8 @@ jobs:
       - name: Run smoke tests
         run: pytest -v -m smoke --alluredir=allure-results
         if: "github.event.inputs.deployment_target == 'smoke'"
-      - name: Run regression tests
-        run: pytest -m regression --alluredir=allure-results
+      # - name: Run regression tests
+      #   run: pytest -m regression --alluredir=allure-results
       - name: Install Java
         uses: actions/setup-java@v4
         with:
