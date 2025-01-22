@@ -149,15 +149,15 @@ def test_get_patient_visit(get_patient_visits, token, app_key):
     get_patient_visits.check_status_code_is_200()
 
 
-# @pytest.mark.regression
-# def test_complete_questionnaire(patient_questionnaire, token, app_key, driver):
-#     patient_questionnaire.get_questionnaire_url_and_visits_id(token, app_key)
-#     patient_questionnaire.validate_empty_questionnaire_form(token, app_key)
-#     patient_questionnaire.answer_survey_questions(driver)
-#     patient_questionnaire.update_patient_info_and_check_completed_questionnaire(token, app_key)
-#     patient_questionnaire.check_status_code_is_200()
-#     patient_questionnaire.get_url_b_and_verify_pdf_response(token, app_key)
-#     patient_questionnaire.check_status_code_is_200()
+@pytest.mark.regression
+def test_complete_questionnaire(patient_questionnaire, token, app_key, driver):
+    patient_questionnaire.get_questionnaire_url_and_visits_id(token, app_key)
+    patient_questionnaire.validate_empty_questionnaire_form(token, app_key)
+    patient_questionnaire.answer_survey_questions(driver)
+    patient_questionnaire.update_patient_info_and_check_completed_questionnaire(token, app_key)
+    patient_questionnaire.check_status_code_is_200()
+    patient_questionnaire.get_url_b_and_verify_pdf_response(token, app_key)
+    patient_questionnaire.check_status_code_is_200()
 
 
 # @pytest.mark.regression
