@@ -14,8 +14,8 @@ from selenium.webdriver.chrome.options import Options
 
 @pytest.fixture(scope="session")
 def app_key():
-    with open('auth.txt', 'r') as file:
-        return file.read().strip()
+    AUTHORIZATION_APP = os.getenv("AUTHORIZATION_APP")
+    return AUTHORIZATION_APP.strip()
 
 
 def get_headers(token, app_key):

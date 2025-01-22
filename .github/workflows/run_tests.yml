@@ -25,6 +25,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: |
+          echo "AUTHORIZATION_APP=${{ secrets.AUTHORIZATION_APP }}" > .env
+
       - name: Set up Python environment
         uses: actions/setup-python@v5
         with:
@@ -74,4 +79,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-      
