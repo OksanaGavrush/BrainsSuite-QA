@@ -37,7 +37,7 @@ jobs:
         run: pytest
         if: "github.event.inputs.deployment_target == 'all'"
       - name: Run smoke tests
-        run: pytest -m smoke
+        run: pytest -v -m smoke
         if: "github.event.inputs.deployment_target == 'smoke'"
       - name: Run regression tests
         run: pytest -m regression
