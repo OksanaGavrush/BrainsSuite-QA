@@ -32,4 +32,4 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Run all tests
-        run: cd Brainsuite_api_testing && pytest
+        run: pytest
