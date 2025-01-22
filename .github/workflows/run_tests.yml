@@ -30,6 +30,12 @@ jobs:
         run: |
           echo "AUTHORIZATION_APP=${{ secrets.AUTHORIZATION_APP }}" > .env
 
+      - name: Debug .env location
+        run: |
+          echo "Current directory: $(pwd)"
+          ls -la
+          cat .env
+
       - name: Set up Python environment
         uses: actions/setup-python@v5
         with:
