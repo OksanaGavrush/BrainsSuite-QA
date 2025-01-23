@@ -1,4 +1,10 @@
+import os
 import allure
+from dotenv import load_dotenv
+
+load_dotenv()
+# BASE_URL = os.getenv("API_BASE_URL")
+# AUTH_APP = os.getenv("AUTHORIZATION_APP")
 
 
 class BaseEndpoint:
@@ -7,6 +13,15 @@ class BaseEndpoint:
     response_json = None
     response_data = None
     visit_id = None
+    mri_uuid = None
+    get_url_report = None
+    report_url_a = None
+    questionnaire_url = None
+    driver = None
+
+    def __init__(self):
+        self.base_url = os.getenv("API_BASE_URL")
+        self.auth_app = os.getenv("AUTHORIZATION_APP")
 
     @allure.step("Check status code is 400")
     def check_status_code_is_400(self):

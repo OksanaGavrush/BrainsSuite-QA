@@ -1,7 +1,7 @@
 import random
-import requests
 from time import sleep
 
+import requests
 import allure
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
@@ -13,27 +13,26 @@ from endpoints.base_endpoint import BaseEndpoint
 
 
 class PatientVisitsQuestionnaire(BaseEndpoint):
-    questionnaire_url = None
-    driver = None
 
     @allure.step("Get questionnaire URL and visit ID")
-    def get_questionnaire_url_and_visits_id(self, token, app_key):
+    def get_questionnaire_url_and_visits_id(self, token):
         headers = {
             "Authorization": f"Bearer {token}",
-            "Authorization-App": f"{app_key}",
+            "Authorization-App": f"{self.auth_app}",
         }
-        self.response = requests.post('https://api.brainsuite.co.jp/patient/visits', headers=headers)
+        self.response = requests.post(f'{self.base_url}/patient/visits', headers=headers)
         self.questionnaire_url = self.response.json()["data"].get('questionnaire')[0].get('url')
         self.visit_id = self.response.json()["data"]['visitId']
+        print(self.questionnaire_url)
 
     @allure.step("Validate that questionnaire form is empty")
-    def validate_empty_questionnaire_form(self, token, app_key):
+    def validate_empty_questionnaire_form(self, token):
         headers = {
             "Authorization": f"Bearer {token}",
-            "Authorization-App": f"{app_key}",
+            "Authorization-App": f"{self.auth_app}",
         }
 
-        self.response = requests.get(f'https://api.brainsuite.co.jp/patient/visits/{self.visit_id}', headers=headers)
+        self.response = requests.get(f'{self.base_url}/patient/visits/{self.visit_id}', headers=headers)
         response_json = self.response.json()
 
         score_keys = [
@@ -47,7 +46,7 @@ class PatientVisitsQuestionnaire(BaseEndpoint):
                     f"{key} score is not None"
 
     @allure.step("Answer survey questions")
-    def answer_survey_questions(self, driver):
+    def answer_survey_questions_page(self, driver):
         self.driver = driver
         self.driver.get(self.questionnaire_url)
         wait = WebDriverWait(self.driver, 10)
@@ -73,7 +72,7 @@ class PatientVisitsQuestionnaire(BaseEndpoint):
         random.choice(sleep_quality_last_month).click()
         selected_sleep_factors = self.driver.find_elements(By.CSS_SELECTOR, 'label[class="ocmc"]')
         random.choice(selected_sleep_factors).click()
-        self.driver.execute_script("window.scrollBy(0, 700);")
+        self.driver.execute_script("window.scrollBy(0, 500);")
         hypertension_status = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="72"] + .oshn__radio-btn')
         random.choice(hypertension_status).click()
         has_diabetes = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="73"] + .oshn__radio-btn')
@@ -106,13 +105,13 @@ class PatientVisitsQuestionnaire(BaseEndpoint):
         sleep(1)
 
     @allure.step("Update patient info and check completed questionnaire")
-    def update_patient_info_and_check_completed_questionnaire(self, token, app_key):
+    def update_patient_info_and_check_completed_questionnaire(self, token):
         headers = {
             "Authorization": f"Bearer {token}",
-            "Authorization-App": f"{app_key}",
+            "Authorization-App": f"{self.auth_app}",
         }
         with allure.step(f"Sending GET request to retrieve report URL"):
-            self.response = requests.get(f'https://api.brainsuite.co.jp/patient/visits/'
+            self.response = requests.get(f'{self.base_url}/patient/visits/'
                                          f'{self.visit_id}', headers=headers)
 
         score_keys = [
@@ -126,12 +125,12 @@ class PatientVisitsQuestionnaire(BaseEndpoint):
             assert isinstance(value, str), f"{key} score is not a string. Got: {type(value)}"
 
     @allure.step("Verify that the report is a valid PDF")
-    def get_url_b_and_verify_pdf_response(self, token, app_key):
+    def get_url_b_and_verify_pdf_response(self, token):
         headers = {
             "Authorization": f"Bearer {token}",
-            "Authorization-App": f"{app_key}",
+            "Authorization-App": f"{self.auth_app}",
         }
-        self.response = requests.get(f'https://api.brainsuite.co.jp/patient/visits/'
+        self.response = requests.get(f'{self.base_url}/patient/visits/'
                                      f'{self.visit_id}', headers=headers)
         get_report_url_b = self.response.json()['data']['report']['B'].get('url')
         pdf_response = requests.get(get_report_url_b, headers=headers)
