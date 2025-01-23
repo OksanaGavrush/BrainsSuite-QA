@@ -10,45 +10,40 @@ from endpoints.post_patient_visits import PostPatientVisits
 from endpoints.patient_visits_questionnaire_check_link import PatientVisitsQuestionnaire
 from endpoints.patient_mri_upload import PatientUpload
 from selenium.webdriver.chrome.options import Options
-from dotenv import load_dotenv
-
-load_dotenv()
+from endpoints.base_endpoint import BaseEndpoint
 
 
 @pytest.fixture(scope="session")
-def app_key():
-    AUTHORIZATION_APP = os.getenv("AUTHORIZATION_APP")
-    return AUTHORIZATION_APP.strip()
+def base_endpoint():
+    return BaseEndpoint()
 
 
-def get_headers(token, app_key):
-    return {
-        "Authorization": f"Bearer {token}",
-        "Authorization-App": f"{app_key}",
-    }
-
-
-def get_token(app_key):
+def get_token(base_endpoint):
     if not os.path.exists('token.txt'):
-        return request_new_token(app_key)
+        return request_new_token(base_endpoint)
 
     with open('token.txt', 'r') as file:
         token = file.read().strip()
 
-    validate_response = requests.get(
-        'https://api.brainsuite.co.jp/patient/info',
-        headers=get_headers(token, app_key)
-    )
+    headers = get_headers(token, base_endpoint)
+    validate_response = requests.get(f'{base_endpoint.base_url}/patient/info', headers=headers)
     if validate_response.status_code == 200:
         return token
     else:
         os.remove('token.txt')
-        return request_new_token(app_key)
+        return request_new_token(base_endpoint)
 
 
-def request_new_token(app_key):
+def get_headers(token, base_endpoint):
+    return {
+        "Authorization": f"Bearer {token}",
+        "Authorization-App": base_endpoint.auth_app
+    }
+
+
+def request_new_token(base_endpoint):
     headers = {
-        "Authorization-App": f"{app_key}"
+        "Authorization-App": f"{base_endpoint.auth_app}"
     }
     body = {
         "nlPatientId": "ALICEx1",
@@ -57,7 +52,7 @@ def request_new_token(app_key):
         "birthdate": "1990-05-15",
         "name": "Alice Johnson"
     }
-    response = requests.post('https://api.brainsuite.co.jp/nextlogic/sync', json=body, headers=headers)
+    response = requests.post(f'{base_endpoint.base_url}/nextlogic/sync', json=body, headers=headers)
     if response.status_code == 200:
         token = response.json().get('data', {}).get('token')
         if not token:
@@ -70,8 +65,8 @@ def request_new_token(app_key):
 
 
 @pytest.fixture(scope="session")
-def token(app_key):
-    return get_token(app_key)
+def token(base_endpoint):
+    return get_token(base_endpoint)
 
 
 @pytest.fixture
