@@ -45,17 +45,21 @@ jobs:
         run: pip install -r requirements.txt
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+        
       - name: Run all tests --alluredir=allure-results
         run: pytest
         if: "github.event.inputs.deployment_target == 'all'"
         continue-on-error: true
+
       - name: Run smoke tests
         run: pytest -v -m smoke --alluredir=allure-results
         if: "github.event.inputs.deployment_target == 'smoke'"
         continue-on-error: true
+
       - name: Run regression tests
         run: pytest -m regression --alluredir=allure-results
         continue-on-error: true
+        
       - name: Install Java
         uses: actions/setup-java@v4
         with:
