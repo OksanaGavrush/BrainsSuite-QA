@@ -46,18 +46,19 @@ jobs:
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
         
-      - name: Run all tests --alluredir=allure-results
-        run: pytest
-        if: "github.event.inputs.deployment_target == 'all'"
+      - name: Run all tests
+        run: pytest --alluredir=allure-results
+        if: github.event.inputs.deployment_target == 'all'
         continue-on-error: true
 
       - name: Run smoke tests
         run: pytest -v -m smoke --alluredir=allure-results
-        if: "github.event.inputs.deployment_target == 'smoke'"
+        if: github.event.inputs.deployment_target == 'smoke'
         continue-on-error: true
 
       - name: Run regression tests
         run: pytest -m regression --alluredir=allure-results
+        if: github.event.inputs.deployment_target == 'regression'
         continue-on-error: true
         
       - name: Install Java
