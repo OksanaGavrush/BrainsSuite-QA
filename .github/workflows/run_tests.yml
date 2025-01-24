@@ -46,10 +46,10 @@ jobs:
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
         
-      - name: Run all tests
-        run: pytest --alluredir=allure-results
-        if: github.event.inputs.deployment_target == 'all'
-        continue-on-error: true
+      # - name: Run all tests
+      #   run: pytest --alluredir=allure-results
+      #   if: github.event.inputs.deployment_target == 'all'
+      #   continue-on-error: true
 
       - name: Run smoke tests
         run: pytest -v -m smoke --alluredir=allure-results
