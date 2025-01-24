@@ -9,9 +9,9 @@ on:
         type: choice
         default: all
         options:
+          - all
           - smoke
           - regression
-          - all
 
 permissions:
   contents: read
