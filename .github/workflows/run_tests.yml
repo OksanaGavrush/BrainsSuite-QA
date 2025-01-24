@@ -7,11 +7,11 @@ on:
         description: select tests to run
         required: true
         type: choice
-        default: smoke
+        default: all
         options:
-          - all
           - smoke
           - regression
+          - all
 
 permissions:
   contents: read
