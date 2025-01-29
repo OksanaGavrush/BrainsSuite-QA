@@ -1,5 +1,4 @@
 import random
-from time import sleep
 
 import requests
 import allure
@@ -57,52 +56,46 @@ class PatientVisitsQuestionnaire(BaseEndpoint):
          .send_keys(Keys.BACKSPACE).send_keys('170').perform())
         send_weight = self.driver.find_element(By.XPATH, '//*[@id="root"]/main/div[3]/div/div/div')
         actions.click(send_weight).send_keys(Keys.BACKSPACE).send_keys(Keys.BACKSPACE).send_keys('65').perform()
-        walk_every_day = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="66"] + .oshn__radio-btn')
-        random.choice(walk_every_day).click()
-        wait.until(ec.presence_of_element_located((By.CSS_SELECTOR, 'input[name="67"] + .oshn__radio-btn')))
-        week_exercise = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="67"] + .oshn__radio-btn')
-        random.choice(week_exercise).click()
-        self.driver.execute_script("window.scrollBy(0, 600);")
-        daily_fruit_veggie_bowls = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="68"] + .oshn__radio-btn')
-        random.choice(daily_fruit_veggie_bowls).click()
-        weekly_seafood_fillets = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="69"] + .oshn__radio-btn')
-        random.choice(weekly_seafood_fillets).click()
-        self.driver.execute_script("window.scrollBy(0, 500);")
-        sleep_quality_last_month = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="70"] + .oshn__radio-btn')
-        random.choice(sleep_quality_last_month).click()
-        selected_sleep_factors = self.driver.find_elements(By.CSS_SELECTOR, 'label[class="ocmc"]')
-        random.choice(selected_sleep_factors).click()
-        self.driver.execute_script("window.scrollBy(0, 500);")
-        hypertension_status = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="72"] + .oshn__radio-btn')
-        random.choice(hypertension_status).click()
-        has_diabetes = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="73"] + .oshn__radio-btn')
-        random.choice(has_diabetes).click()
-        smoking_status = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="74"] + .oshn__radio-btn')
-        random.choice(smoking_status).click()
-        self.driver.execute_script("window.scrollBy(0, 500);")
-        daily_alcohol_intake = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="75"] + .oshn__radio-btn')
-        random.choice(daily_alcohol_intake).click()
-        sleep(2)
-        next_button = self.driver.find_element(By.XPATH, '//button[text()="進む ▶︎"]')
-        next_button.click()
-        sleep(2)
-        felt_nervous_last_30_days = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="76"] + .oshs__radio-btn')
-        random.choice(felt_nervous_last_30_days).click()
-        felt_hopeless_last_30_days = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="77"] + .oshs__radio-btn')
-        random.choice(felt_hopeless_last_30_days).click()
-        felt_restless_last_30_days = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="78"] + .oshs__radio-btn')
-        random.choice(felt_restless_last_30_days).click()
-        self.driver.execute_script("window.scrollBy(0, 800);")
-        felt_downhearted_last_30_days = (self.driver.find_elements
-                                         (By.CSS_SELECTOR, 'input[name="79"] + .oshs__radio-btn'))
-        random.choice(felt_downhearted_last_30_days).click()
-        felt_exhausted_last_30_days = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="80"] + .oshs__radio-btn')
-        random.choice(felt_exhausted_last_30_days).click()
-        felt_worthless_last_30_days = self.driver.find_elements(By.CSS_SELECTOR, 'input[name="81"] + .oshs__radio-btn')
-        random.choice(felt_worthless_last_30_days).click()
-        sleep(2)
-        self.driver.find_element(By.XPATH, '//button[text()="進む ▶︎"]').click()
-        sleep(1)
+        questions = [
+            ("walk_every_day", 'input[name="66"] + .oshn__radio-btn'),
+            ("week_exercise", 'input[name="67"] + .oshn__radio-btn'),
+            ("daily_fruit_veggie_bowls", 'input[name="68"] + .oshn__radio-btn'),
+            ("weekly_seafood_fillets", 'input[name="69"] + .oshn__radio-btn'),
+            ("sleep_quality_last_month", 'input[name="70"] + .oshn__radio-btn'),
+            ("selected_sleep_factors", 'label[class="ocmc"]'),
+            ("hypertension_status", 'input[name="72"] + .oshn__radio-btn'),
+            ("has_diabetes", 'input[name="73"] + .oshn__radio-btn'),
+            ("smoking_status", 'input[name="74"] + .oshn__radio-btn'),
+            ("daily_alcohol_intake", 'input[name="75"] + .oshn__radio-btn')
+        ]
+        for name, selector in questions:
+            wait.until(ec.visibility_of_all_elements_located((By.CSS_SELECTOR, selector)))
+            elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
+            random.choice(elements).click()
+            self.driver.execute_script("window.scrollBy(0, 300);")
+        wait.until(ec.text_to_be_present_in_element(
+            (By.CSS_SELECTOR, ".page-question__progress-bar span"), "66%"))
+        next_button = wait.until(ec.element_to_be_clickable((By.XPATH, '//button[text()="進む ▶︎"]')))
+        actions = ActionChains(driver)
+        actions.move_to_element(next_button).click().perform()
+        questions = [
+            ("felt_nervous_last_30_days", 'input[name="76"] + .oshs__radio-btn'),
+            ("felt_hopeless_last_30_days", 'input[name="77"] + .oshs__radio-btn'),
+            ("felt_restless_last_30_days", 'input[name="78"] + .oshs__radio-btn'),
+            ("felt_downhearted_last_30_days", 'input[name="79"] + .oshs__radio-btn'),
+            ("felt_exhausted_last_30_days", 'input[name="80"] + .oshs__radio-btn'),
+            ("felt_worthless_last_30_days", 'input[name="81"] + .oshs__radio-btn')
+        ]
+        for name, selector in questions:
+            wait.until(ec.visibility_of_all_elements_located((By.CSS_SELECTOR, selector)))
+            elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
+            random.choice(elements).click()
+            self.driver.execute_script("window.scrollBy(0, 300);")
+        wait.until(ec.text_to_be_present_in_element(
+            (By.CSS_SELECTOR, ".page-question__progress-bar span"), "100%"))
+        next_button = wait.until(ec.element_to_be_clickable((By.XPATH, '//button[text()="進む ▶︎"]')))
+        actions = ActionChains(driver)
+        actions.move_to_element(next_button).click().perform()
 
     @allure.step("Update patient info and check completed questionnaire")
     def update_patient_info_and_check_completed_questionnaire(self, token):
