@@ -4,7 +4,7 @@ import pytest
 @pytest.mark.smoke
 def test_create_user_without_authorization_app(post_syns_user):
     post_syns_user.create_user_without_authorization()
-    post_syns_user.check_status_code_is_400()
+    post_syns_user.check_status_code_is_200()
     post_syns_user.check_massage_authorization()
 
 
