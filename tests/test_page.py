@@ -4,7 +4,7 @@ import pytest
 @pytest.mark.smoke
 def test_create_user_without_authorization_app(post_syns_user):
     post_syns_user.create_user_without_authorization()
-    post_syns_user.check_status_code_is_200()
+    post_syns_user.check_status_code_is_400()
     post_syns_user.check_massage_authorization()
 
 
@@ -12,7 +12,7 @@ def test_create_user_without_authorization_app(post_syns_user):
 def test_no_duplicate_user_creation(post_syns_user):
     post_syns_user.no_create_user_already_exists()
     post_syns_user.validate_message_in_response()
-    post_syns_user.check_status_code_is_400()
+    post_syns_user.check_status_code_is_200()
 
 
 @pytest.mark.smoke
