@@ -9,4 +9,5 @@ allure-report
 auth.txt
 mri_data/
 mri_upload_utils.py
-tokens.txt
+token.txt
+tests/token.txt
