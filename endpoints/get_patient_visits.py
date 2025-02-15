@@ -14,7 +14,7 @@ class GetPatientVisits(BaseEndpoint):
             "Authorization": f"Bearer {token} + q",
             "Authorization-App": f"{self.auth_app}",
         }
-        self.response = requests.get(f'{self.base_url}/patient/info', headers=headers)
+        self.response = requests.get(f'{self.base_url}/patient/visits', headers=headers)
 
     @allure.step("Get patient visits without providing token")
     def get_patient_visits_with_not_provided_token(self):
@@ -22,7 +22,7 @@ class GetPatientVisits(BaseEndpoint):
             "Authorization": '',
             "Authorization-App": f"{self.auth_app}",
         }
-        self.response = requests.get(f'{self.base_url}/patient/info', headers=headers)
+        self.response = requests.get(f'{self.base_url}/patient/visits', headers=headers)
 
     @allure.step("Get patient visits with valid token")
     def get_patient_visits_valid_token(self, token):
