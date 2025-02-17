@@ -12,18 +12,7 @@ For testing, we utilize the [BrainSuite Public API](#).
 ## Setup
 Tests are structured to demonstrate interaction with both API and UI. We manage test data and environment through `conftest.py`, where we also handle user authentication via token generation.
 
-## Test Scenarios
-
-### API Tests
-1. **User Update Test**: This tests the update functionality where a POST request is made to update user details (`name`, `birthdate`, and `gender`), followed by a GET request to ensure the updates reflect correctly.
-2. **Patient Visit Creation and Retrieval**:
-   - POST request to create a patient visit.
-   - GET request to retrieve the patient's questionnaire details.
-
-### UI Tests with Selenium WebDriver
-- **Survey Interaction Test**: Automates a web browser to handle survey responses, ensuring that the survey report is generated correctly as a PDF.
-
 ## Running Tests
-Use the following command to run tests marked as "smoke":
+Use the following command to run tests:
 ```bash
-pytest -m smoke
+pytest -v
