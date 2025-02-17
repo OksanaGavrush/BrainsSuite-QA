@@ -13,16 +13,21 @@ from selenium.webdriver.chrome.options import Options
 from endpoints.base_endpoint import BaseEndpoint
 
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = current_dir
+token_file_path = os.path.join(project_root, 'token.txt')
+
+
 @pytest.fixture(scope="session")
 def base_endpoint():
     return BaseEndpoint()
 
 
 def get_token(base_endpoint):
-    if not os.path.exists('token.txt'):
+    if not os.path.exists(token_file_path):
         return request_new_token(base_endpoint)
 
-    with open('token.txt', 'r') as file:
+    with open(token_file_path, 'r') as file:
         token = file.read().strip()
 
     headers = get_headers(token, base_endpoint)
@@ -30,7 +35,7 @@ def get_token(base_endpoint):
     if validate_response.status_code == 200:
         return token
     else:
-        os.remove('token.txt')
+        os.remove(token_file_path)
         return request_new_token(base_endpoint)
 
 
@@ -57,7 +62,7 @@ def request_new_token(base_endpoint):
         token = response.json().get('data', {}).get('token')
         if not token:
             raise Exception("Token not found in response")
-        with open('token.txt', 'w') as file:
+        with open(token_file_path, 'w') as file:
             file.write(token)
         return token
     else:
